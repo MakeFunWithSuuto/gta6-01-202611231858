@@ -15,11 +15,12 @@ const CONTROLS = [
 
 /** Move a menu cursor and report the chosen item, if any. */
 export function navigateMenu(menu, items, input, enabled = () => true) {
-  if (wasPressed(input, 'ArrowDown', 'KeyS')) { do menu.cursor = (menu.cursor + 1) % items.length; while (!enabled(items[menu.cursor])); return { moved: true }; }
-  if (wasPressed(input, 'ArrowUp', 'KeyW')) { do menu.cursor = (menu.cursor - 1 + items.length) % items.length; while (!enabled(items[menu.cursor])); return { moved: true }; }
-  if (wasPressed(input, 'Enter', 'Space')) return { chosen: items[menu.cursor] };
+  if (wasPressed(input, 'Enter', 'Space') && enabled(items[menu.cursor])) return { chosen: items[menu.cursor] };
   if (input.clicked && menu.hover !== null && menu.hover !== undefined && enabled(items[menu.hover])) return { chosen: items[menu.hover] };
-  return {};
+  const step = wasPressed(input, 'ArrowDown', 'KeyS') ? 1 : wasPressed(input, 'ArrowUp', 'KeyW') ? -1 : 0;
+  if (!step) return {};
+  do menu.cursor = (menu.cursor + step + items.length) % items.length; while (!enabled(items[menu.cursor]));
+  return { moved: true };
 }
 
 function drawLogo(ctx, W, y) {

@@ -38,9 +38,11 @@ function runGame() {
   let save = readSave();
   let state = createGame(1);
   resize(state);
-  state.player.x += 0;
+  state.player.x = 8 * 520 + 240; state.player.y = 3 * 520 + 60;
   populate(state);
   let screen = 'title';
+  // Read-only handle for automated play tests.
+  window.portSolera = { get state() { return state; }, get screen() { return screen; } };
   const titleMenu = { cursor: save ? 0 : 1, showControls: false };
   const pauseMenu = { cursor: 0, showControls: false };
   window.addEventListener('resize', () => resize(state));
@@ -59,10 +61,12 @@ function runGame() {
   }
 
   function updateTitle() {
-    state.time += STEP;
-    state.camera.x += 30 * STEP;
-    state.camera.y += 12 * STEP;
     state.clock = 17 * 60 + 50;
+    stepGame(state, null, null);
+    const t = state.time * 0.05;
+    state.camera.x = state.player.x + Math.cos(t) * 160;
+    state.camera.y = state.player.y + Math.sin(t) * 90;
+    state.camera.zoom = 0.85;
     if (titleMenu.showControls) { if (wasPressed(input, 'Escape', 'Enter') || input.clicked) titleMenu.showControls = false; return; }
     const r = navigateMenu(titleMenu, TITLE_ITEMS, input, (i) => i !== 'Continue' || !!save);
     if (r.moved) state.sfx.push({ name: 'click', x: null, y: null, volume: 1 });
