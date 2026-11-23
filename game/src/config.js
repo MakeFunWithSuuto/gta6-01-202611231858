@@ -1,61 +1,45 @@
-// Every tuning number and colour in one place. The playfield is a fixed 1280x720 logical area;
-// the renderer scales it to the window, so no rule below depends on the screen size.
+// Shared tuning numbers for Port Solera: city layout, physics, police and the clock.
 
-export const FIELD = { width: 1280, height: 720, groundY: 664 };
+/** Distance between two parallel road centre lines. */
+export const BLOCK = 520;
+/** Asphalt width of every street. */
+export const ROAD = 92;
+/** Width of the pavement ring around each block. */
+export const SIDEWALK = 20;
+/** Land blocks across and down; the sea lies east of the last column. */
+export const GRID_X = 9;
+export const GRID_Y = 9;
+export const WORLD_W = BLOCK * (GRID_X + 2);
+export const WORLD_H = BLOCK * GRID_Y;
+/** Lane centre distance from the road centre line (right-hand traffic). */
+export const LANE = 21;
+/** Distance from the road centre line to a car parked at the kerb. */
+export const KERB = 43;
 
-/** The simulation's fixed step, in seconds: 60 updates a second whatever the display's rate. */
+/** Fixed simulation step in seconds. */
 export const STEP = 1 / 60;
 
-export const PLAYER = {
-  width: 72,
-  height: 24,
-  speed: 560,
-  invulnerable: 1.5,
-};
+/** How strongly a height lifts a roof away from the view centre (fake perspective). */
+export const PARALLAX = 0.0011;
+/** Sun direction used for ground shadows, per unit of building height. */
+export const SUN = { x: 0.32, y: 0.22 };
 
-export const LIVES = 3;
+export const PLAYER_FOOT = { walk: 120, sprint: 210, radius: 9, health: 100 };
 
-export const BLOCK = {
-  minWidth: 40,
-  maxWidth: 110,
-  height: 36,
-  speed: 240,
-  speedPerLevel: 30,
-  speedJitter: 90,
-  interval: 0.55,
-  intervalScale: 0.88,
-  minInterval: 0.14,
-  dodgePoints: 1,
-};
+/** Real seconds per in-game minute. */
+export const CLOCK_RATE = 1;
 
-export const COIN = {
-  size: 24,
-  speed: 190,
-  speedPerLevel: 14,
-  interval: 1.4,
-  intervalJitter: 0.8,
-  points: 10,
-};
+/** Police cars allowed on the street for each wanted level. */
+export const POLICE_CARS_BY_STARS = [0, 1, 2, 3, 5, 6];
+/** Seconds out of sight before one star fades, per star level. */
+export const LOSE_STAR_SECONDS = [0, 7, 9, 11, 13, 15];
+export const POLICE_SIGHT = 620;
 
-/** Seconds of play per level, and the last level: speeds and spawn rates stop growing there. */
-export const LEVEL = { seconds: 12, max: 12 };
+/** Population kept alive around the player. */
+export const TRAFFIC_TARGET = 34;
+export const PEDESTRIAN_TARGET = 46;
+export const SPAWN_MIN = 700;
+export const SPAWN_MAX = 1150;
+export const DESPAWN = 1500;
 
-/** How many falling things can exist at once; the pool is allocated once, at boot. */
-export const POOL_SIZE = 64;
-
-export const PALETTE = {
-  backdrop: '#11141b',
-  sky: '#1b1f2a',
-  ground: '#2a3040',
-  player: '#4fc3f7',
-  block: '#e5534b',
-  coin: '#f2c94c',
-  panel: '#252b38',
-  text: '#eef1f5',
-  muted: '#8b93a3',
-};
-
-export const FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif';
-
-/** Where the best score is kept between visits (this browser only). */
-export const BEST_KEY = 'block-dodger.best';
+export const SAVE_KEY = 'port-solera.save.v1';
